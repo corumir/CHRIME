@@ -1,0 +1,180 @@
+machine("justinahmanson.Constellation", 
+        displayName:"Constellation", 
+        author:"Justin Ahmanson",
+        description: "Given IP, Domain, NS, or MX.\
+Finds related IPs, Domain, NS, & MX.\
+Finds Hosting Provider (for the IP address)\
+Net Range/CIDR (for the IP address)\
+Domain Registrar (for the domain)\
+Asynchronous Number\
+Asynchronous Name") {
+    start {
+        paths{
+            //Domain
+            type("maltego.Domain")
+            paths{
+                path{
+                    run("paterva.v2.DomainToWebsite_DNS")
+                    run("paterva.v2.DNSNameToIPAddress_DNS")
+                    paths{
+                        run("paterva.v2.IPAddressToNetblock_Cuts")
+                        run("paterva.v2.IPAddressToNetblock_SS")
+                        run("paterva.v2.IPAddressToNetblock_whois")
+                    }
+                    run("paterva.v2.NetblockToAS_SS")
+                    run("paterva.v2.ASNumberToCompany")
+
+
+                }
+                path{
+                    run("paterva.v2.DomainToWebsiteDNS_SE")
+                    run("paterva.v2.DNSNameToIPAddress_DNS")
+                    paths{
+                        run("paterva.v2.IPAddressToNetblock_Cuts")
+                        run("paterva.v2.IPAddressToNetblock_SS")
+                        run("paterva.v2.IPAddressToNetblock_whois")
+                    }
+                    run("paterva.v2.NetblockToAS_SS")
+                    run("paterva.v2.ASNumberToCompany")
+
+
+                }
+                path{
+                    run("paterva.v2.DomainToNSrecord_DNS")
+                    paths{
+                        run("paterva.v2.DNSNameToIPAddress_DNS")
+                        path{
+                            run("paterva.v2.NSrecordToNetblock_NS4block")
+                            run("paterva.v2.NetblockToAS_SS")
+                            run("paterva.v2.ASNumberToCompany")
+                        }
+                    }
+                }
+                path{
+                    run("paterva.v2.DomainToMXrecord_DNS")
+                    run("paterva.v2.DNSNameToIPAddress_DNS")
+                }
+
+                run("paterva.v2.DomainToEntities_Whois_NER")
+
+            }
+
+            //IP start
+            type("maltego.IPv4Address")
+            path{
+                paths{
+                    path{
+                        paths{
+                            run("paterva.v2.IPAddressToDNSName_DNS")
+                            run("paterva.v2.IPAddressToDNSName_SharedIP")
+                        }
+                        run("paterva.v2.DNSNameToDomain_DNS")
+                        paths{
+                            path{
+                                run("paterva.v2.DomainToWebsite_DNS")
+                                run("paterva.v2.DNSNameToIPAddress_DNS")
+                                paths{
+                                    run("paterva.v2.IPAddressToNetblock_Cuts")
+                                    run("paterva.v2.IPAddressToNetblock_SS")
+                                    run("paterva.v2.IPAddressToNetblock_whois")
+                                }
+                                run("paterva.v2.NetblockToAS_SS")
+                                run("paterva.v2.ASNumberToCompany")
+
+
+                            }
+                            path{
+                                run("paterva.v2.DomainToWebsiteDNS_SE")
+                                run("paterva.v2.DNSNameToIPAddress_DNS")
+                                paths{
+                                    run("paterva.v2.IPAddressToNetblock_Cuts")
+                                    run("paterva.v2.IPAddressToNetblock_SS")
+                                    run("paterva.v2.IPAddressToNetblock_whois")
+                                }
+                                run("paterva.v2.NetblockToAS_SS")
+                                run("paterva.v2.ASNumberToCompany")
+
+
+                            }
+                            path{
+                                run("paterva.v2.DomainToNSrecord_DNS")
+                                paths{
+                                    run("paterva.v2.DNSNameToIPAddress_DNS")
+                                    path{
+                                        run("paterva.v2.NSrecordToNetblock_NS4block")
+                                        run("paterva.v2.NetblockToAS_SS")
+                                        run("paterva.v2.ASNumberToCompany")
+                                    }
+                                }
+                            }
+                            path{
+                                run("paterva.v2.DomainToMXrecord_DNS")
+                                run("paterva.v2.DNSNameToIPAddress_DNS")
+                            }
+                        }
+                    }
+                    path{
+                        run("paterva.v2.IPAddressToEntities_Whois_NER")
+                    }
+                    
+                }
+            }
+
+            //NS or MX start
+            path{
+                run("paterva.v2.DNSNameToDomain_DNS")
+                paths{
+                    path{
+                        run("paterva.v2.DomainToWebsite_DNS")
+                        run("paterva.v2.DNSNameToIPAddress_DNS")
+                        paths{
+                            run("paterva.v2.IPAddressToNetblock_Cuts")
+                            run("paterva.v2.IPAddressToNetblock_SS")
+                            run("paterva.v2.IPAddressToNetblock_whois")
+                        }
+                        run("paterva.v2.NetblockToAS_SS")
+                        run("paterva.v2.ASNumberToCompany")
+
+
+                    }
+                    path{
+                        run("paterva.v2.DomainToWebsiteDNS_SE")
+                        run("paterva.v2.DNSNameToIPAddress_DNS")
+                        paths{
+                            run("paterva.v2.IPAddressToNetblock_Cuts")
+                            run("paterva.v2.IPAddressToNetblock_SS")
+                            run("paterva.v2.IPAddressToNetblock_whois")
+                        }
+                        run("paterva.v2.NetblockToAS_SS")
+                        run("paterva.v2.ASNumberToCompany")
+
+
+                    }
+                    path{
+                        run("paterva.v2.DomainToNSrecord_DNS")
+                        paths{
+                            run("paterva.v2.DNSNameToIPAddress_DNS")
+                            path{
+                                run("paterva.v2.NSrecordToNetblock_NS4block")
+                                run("paterva.v2.NetblockToAS_SS")
+                                run("paterva.v2.ASNumberToCompany")
+                            }
+                        }
+                    }
+                    path{
+                        run("paterva.v2.DomainToMXrecord_DNS")
+                        run("paterva.v2.DNSNameToIPAddress_DNS")
+                    }
+
+                    run("paterva.v2.DomainToEntities_Whois_NER")
+
+                }
+            }
+
+        }
+        
+        outgoing(0,scope:"global")
+        incoming(0)
+        delete()
+    }
+}
