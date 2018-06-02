@@ -1,0 +1,29 @@
+machine("justinahmanson.Constellation-Domain",
+        displayName:"Constellation - Domain",
+        author:"Justin Ahmanson",
+        description: "Input: domain\
+output: IP, NS, MX, Netblock, ASN, AS Name, Registrar") {
+
+    start {
+        paths{
+            path{
+                run("paterva.v2.DomainToMXrecord_DNS")
+                run("paterva.v2.DNSNameToIPAddress_DNS")
+            }
+            path{
+                run("paterva.v2.DomainToNSrecord_DNS")
+                run("paterva.v2.DNSNameToIPAddress_DNS")
+            }
+            path{
+                run("paterva.v2.DomainToWebsite_DNS")
+                run("paterva.v2.DNSNameToIPAddress_DNS")
+            }
+        }
+        paths{
+            run("paterva.v2.IPAddressToNetblock_SS")
+            run("paterva.v2.IPAddressToNetblock_whois")
+        }
+        run("paterva.v2.NetblockToAS_SS")
+        run("paterva.v2.ASNumberToCompany")
+    }
+}
